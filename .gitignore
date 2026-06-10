@@ -5,3 +5,5 @@ dist
 generated
 *.log
 .DS_Store
+*.http
+*.rest
