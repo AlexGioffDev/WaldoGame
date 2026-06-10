@@ -1,0 +1,31 @@
+{
+    "goldSearch": {
+        "width": 1920,
+        "height": 1207,
+        "name": "Gold Search",
+        "author": "Waldo's books",
+        "characters": [
+            {
+                "name": "Waldo",
+                "posX": 0.1871,
+                "posY": 0.4257,
+                "tolerance_x": 0.0068,
+                "tolerance_y": 0.034
+            },
+            {
+                "name": "Wilma",
+                "posX": 0.5712,
+                "posY": 0.8011,
+                "tolerance_x": 0.0115,
+                "tolerance_y": 0.0257
+            },
+            {
+                "name": "Odlaw",
+                "posX": 0.3747,
+                "posY": 0.1132,
+                "tolerance_x": 0.0078,
+                "tolerance_y": 0.029
+            }
+        ]
+    }
+}
