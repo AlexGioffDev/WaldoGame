@@ -1,0 +1,44 @@
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - "3000:3000"
+    depends_on:
+      - auth-service
+      - game-service
+
+  auth-service:
+    build: ./waldo_auth
+    env_file:
+      - ./waldo_auth/.env.docker
+    depends_on:
+      - auth-db
+
+  game-service:
+    build: ./waldo_game
+    env_file:
+      - ./waldo_game/.env.docker
+    depends_on:
+      - game-db
+
+  auth-db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME_AUTH}
+    volumes:
+      - auth_db_data:/var/lib/postgresql/data
+
+  game-db:
+    image: postgres:16
+    environment:
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME_GAME}
+    volumes:
+      - game_db_data:/var/lib/postgresql/data
+
+volumes:
+  auth_db_data:
+  game_db_data:

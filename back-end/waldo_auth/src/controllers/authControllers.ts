@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from 'bcrypt'
 import { prisma } from "../lib/prisma.js";
 import { generateToken, verifyToken } from "../utils/jwt.js";
-import { Prisma } from "../../generated/prisma/client.js";
+import { Prisma } from "../generated/prisma/client.js";
 
 export const signUp = async (req: Request, res: Response) => {
 

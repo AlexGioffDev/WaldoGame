@@ -1,9 +1,17 @@
 import express from 'express'
 import { prisma } from './lib/prisma.js'
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 
 const app = express();
 
+app.use('/images', express.static(path.join(__dirname, "../public/images")))
 app.use(express.json())
 
 app.get('/verify', async (req, res) => {
@@ -35,6 +43,10 @@ app.get('/verify', async (req, res) => {
             message: "Something went wrong with the server, try again later!"
         })
     }
+})
+
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'up' })
 })
 
 app.listen(3002, (err) => {

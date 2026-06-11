@@ -7,6 +7,9 @@ app.use(express.json());
 
 
 app.use('/api/auth', authRouter)
+app.get('/health', (req, res) => {
+    res.status(200).json({ status: 'up' })
+})
 
 
 app.listen(3001, (err) => {
