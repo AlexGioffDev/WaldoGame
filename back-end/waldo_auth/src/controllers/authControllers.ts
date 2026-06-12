@@ -94,7 +94,7 @@ export const login = async (req: Request, res: Response) => {
         const match = await bcrypt.compare(password, user.password);
 
         if (!match) {
-            return res.status(404).json({
+            return res.status(401).json({
                 error: "Invalid Value",
                 message: "Fields not valid! Try again!"
             })
@@ -176,4 +176,15 @@ export const getProfile = async (req: Request, res: Response) => {
             message: "Something went wrong! Please try again later"
         })
     }
+}
+
+export const getProfiles = async (req: Request, res: Response) => {
+    const ids = (req.query.ids as string).split(',').map(Number)
+
+    const users = await prisma.user.findMany({
+        where: { user_id: { in: ids } },
+        select: { user_id: true, username: true }
+    })
+
+    res.json({ users })
 }

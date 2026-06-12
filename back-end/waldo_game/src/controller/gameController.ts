@@ -29,7 +29,7 @@ export const checkPosition = async (req: Request, res: Response) => {
     try {
         const { imageId, x, y } = req.body;
 
-        if (!imageId || !x || !y) {
+        if (imageId == null || x == null || y == null) {
             return res.status(400).json({
                 error: "Bad Request",
                 message: "Pass all fields!"
@@ -66,12 +66,17 @@ export const checkPosition = async (req: Request, res: Response) => {
 }
 
 export const saveScore = async (req: Request, res: Response) => {
+    const secret = req.headers['x-internal-secret']
+
+    if (secret !== process.env.INTERNAL_SECRET) {
+        return res.status(403).json({ error: "Forbidden" })
+    }
     const userId = req.headers['x-user-id']!;
 
     try {
-        const {score} = req.body;
+        const { score } = req.body;
 
-        if(!score){
+        if (!score) {
             return res.status(400).json({
                 error: "Bad Request",
                 message: "You need to pass a score!"
@@ -79,7 +84,7 @@ export const saveScore = async (req: Request, res: Response) => {
         }
 
         const scoreNumber = Number(score);
-        if(isNaN(scoreNumber)){
+        if (isNaN(scoreNumber)) {
             return res.status(400).json({
                 error: "Bad Request",
                 message: "You need to pass a valid number"
@@ -98,7 +103,7 @@ export const saveScore = async (req: Request, res: Response) => {
         })
 
 
-    } catch  {
+    } catch {
         return res.status(500).json({
             error: "Internal Server Error",
             message: "Something went wrong! Please try again later"
@@ -108,12 +113,15 @@ export const saveScore = async (req: Request, res: Response) => {
 }
 
 export const topBoard = async (req: Request, res: Response) => {
-    try {  
+    try {
         const tops = await prisma.game.findMany({
-            take: 5
+            take: 5,
+            orderBy: {
+                score: "desc"
+            }
         })
 
-        return res.status(200).json({tops})
+        return res.status(200).json({ tops })
     } catch {
         return res.status(500).json({
             error: "Internal Server Error",

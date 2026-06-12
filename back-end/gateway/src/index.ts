@@ -42,30 +42,40 @@ app.get('/health', async (req, res) => {
     }
 })
 
-app.get('/leaderboard', async (req: Request, res: Response) => {
+app.get('/leaderboard', async (req, res) => {
     try {
-        const gameRes = await fetch("http://game-service:3002/api/game/top");
+        const gameRes = await fetch("http://game-service:3002/api/game/top")
 
+        if (!gameRes.ok) {
+            return res.status(500).json({ error: "Failed to fetch scores" })
+        }
 
-        const { tops } = await gameRes.json();
+        const { tops } = await gameRes.json()
 
-        const leaderboard = await Promise.all(tops.map(async (entry: { userId: number, score: number }) => {
-            const authRes = await fetch(`http://auth-service:3001/api/auth/profile/${entry.userId}`);
-            const { username } = await authRes.json();
-            return { username, score: entry.score }
+        const ids = tops.map((e: { userId: number }) => e.userId).join(',')
+
+        const authRes = await fetch(`http://auth-service:3001/api/auth/profiles?ids=${ids}`)
+
+        if (!authRes.ok) {
+            return res.status(500).json({ error: "Failed to fetch users" })
+        }
+
+        const { users } = await authRes.json()
+
+        const leaderboard = tops.map((entry: { userId: number, score: number }) => ({
+            username: users.find((u: { user_id: number, username: string }) => u.user_id === entry.userId)?.username,
+            score: entry.score
         }))
 
         return res.status(200).json({ leaderboard })
 
     } catch (err) {
-        console.log(err)
         return res.status(500).json({
             error: "Internal Server Error",
             message: "Something went wrong! Try again later!"
         })
     }
 })
-
 app.use('/auth', createProxyMiddleware({
     target: "http://auth-service:3001",
     changeOrigin: true,

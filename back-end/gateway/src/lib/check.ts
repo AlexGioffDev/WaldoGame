@@ -22,5 +22,6 @@ export const isAuthenticate = async (req: Request, res: Response, next: NextFunc
 
     const { userId } = await authRes.json();
     req.headers['x-user-id'] = String(userId);
+    req.headers["x-internal-secret"] = process.env.INTERNAL_SECRET!;
     next();
 }
