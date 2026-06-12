@@ -27,5 +27,27 @@
                 "tolerance_y": 0.029
             }
         ]
+    },
+    "skiSearch": {
+        "width": 2560,
+        "height": 1623,
+        "name": "Ski Search",
+        "author": "Waldo's book",
+        "characters": [
+            {
+                "name": "Wilma",
+                "posX": 0.4898,
+                "posY": 0.4189,
+                "tolerance_x": 0.0094,
+                "tolerance_y": 0.0277
+            },
+            {
+                "name": "Waldo",
+                "posX": 0.8536,
+                "posY": 0.7412,
+                "tolerance_x": 0.0137,
+                "tolerance_y": 0.0666
+            }
+        ]
     }
 }

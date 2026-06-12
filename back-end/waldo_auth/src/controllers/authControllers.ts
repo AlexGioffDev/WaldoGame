@@ -139,3 +139,41 @@ export const verify = (req: Request, res: Response) => {
         })
     }
 }
+
+export const getProfile = async (req: Request, res: Response) => {
+    try {
+        const {id} = req.params;
+        const idNumber = Number(id);
+
+        if(isNaN(idNumber))
+        {
+            return res.status(400).json({
+                error: "Bad Request",
+                message: "Id must to be a number"
+            })
+        }
+
+        const user = await prisma.user.findUnique({
+            where: {
+                user_id: idNumber
+            }
+        })
+
+        if(!user) {
+            return res.status(404).json({
+                error: "Not Found",
+                message: "User not found!"
+            })
+        }
+
+        return res.status(200).json({
+            username: user.username
+        })
+
+    } catch {
+        return res.status(500).json({
+            error: "Internal Server Error",
+            message: "Something went wrong! Please try again later"
+        })
+    }
+}

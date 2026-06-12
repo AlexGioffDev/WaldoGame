@@ -7,3 +7,5 @@ generated
 .DS_Store
 *.http
 *.rest
+*/.env
+*/.env.docker

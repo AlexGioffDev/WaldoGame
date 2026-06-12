@@ -3,6 +3,11 @@ import {prisma} from '../src/lib/prisma.js';
 
 async function main()
 {
+    await prisma.character.deleteMany();
+    await prisma.image.deleteMany();
+
+    console.log("DB clear!");
+    
     for(const [filename, imageData] of Object.entries(data))
     {
         const image = await prisma.image.create({
